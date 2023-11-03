@@ -8,7 +8,7 @@ pool:
   name: $(agentPoolName)
 
 stages:
-  - stage: Terraform Validate
+  - stage: TerraformValidate
     jobs:
       - job: TerraformValidateJob
         continueOnError: false
@@ -23,7 +23,7 @@ stages:
             displayName: Terraform Install
             inputs:
               terraformVersion: 'latest'
-          - task: TerraformTaskV@4
+          - task: TerraformTaskV4@4
             displayName: Terraform Init
             inputs:
               provider: 'azurerm'
@@ -34,7 +34,7 @@ stages:
               backendAzureRmStorageAccountName: 'tfstateremotebackup'
               backendAzureRmContainerName: 'tfstatefiles'
               backendAzureRmKey: 'aks-azure-devops.tfstate'
-          - task: TerraformTaskU@4
+          - task: TerraformTaskV4@4
             displayName: Terraform Validate
             inputs:
               provider: 'azurerm'
