@@ -23,7 +23,7 @@ stages:
             displayName: Terraform Install
             inputs:
               terraformVersion: 'latest'
-          - task: TerraformTaskV4@4
+          - task: TerraformTaskV@4
             displayName: Terraform Init
             inputs:
               provider: 'azurerm'
@@ -34,10 +34,9 @@ stages:
               backendAzureRmStorageAccountName: 'tfstateremotebackup'
               backendAzureRmContainerName: 'tfstatefiles'
               backendAzureRmKey: 'aks-azure-devops.tfstate'
-          # - task: TerraformTaskV4@4
-          #   displayName: Terraform Validate
-          #   inputs:
-          #     provider: 'azurerm'
-          #     command: 'validate'
-          #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
-          
+          - task: TerraformTaskU@4
+            displayName: Terraform Validate
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
