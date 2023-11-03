@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp1
+  name: myapp1-systemnode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp1-systemnode
+  template:
+    metadata:
+      labels:
+        app: myapp1-systemnode
+    spec:
+      containers:
+      - image: shanukumarm/custom-nginx #stacksimplify/kubenginx:1.0.0
+        name: myapp1-container
+        ports:
+          - containerPort: 80
+
