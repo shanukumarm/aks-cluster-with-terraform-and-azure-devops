@@ -28,7 +28,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraformm-files'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-files'
               backendServiceArm: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
               backendAzureRmResourceGroupName: 'terraform-storage-for-tfstate'
               backendAzureRmStorageAccountName: 'tfstateremotebackup'
