@@ -85,6 +85,14 @@ stages:
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                     environmentServiceNameAzureRM: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
+                # - task: TerraformTaskV4@4
+                #   displayName: Terraform Apply
+                #   inputs:
+                #     provider: 'azurerm'
+                #     command: 'apply'
+                #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
+                #     commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
+                #     environmentServiceNameAzureRM: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
                 - task: TerraformTaskV4@4
                   displayName: Terraform Apply
                   inputs:
@@ -92,4 +100,4 @@ stages:
                     command: 'apply'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
-                    environmentServiceNameAzureRM: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
+                    environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
