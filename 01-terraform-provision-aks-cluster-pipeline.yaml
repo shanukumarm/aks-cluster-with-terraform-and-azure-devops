@@ -35,6 +35,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
+              commandOptions: '-reconfigure'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
               backendServiceArm: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
               backendAzureRmResourceGroupName: 'terraform-storage-for-tfstate'
@@ -69,6 +70,7 @@ stages:
                   inputs:
                     provider: 'azurerm'
                     command: 'init'
+                    commandOptions: '-reconfigure'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     backendServiceArm: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
                     backendAzureRmResourceGroupName: 'terraform-storage-for-tfstate'
