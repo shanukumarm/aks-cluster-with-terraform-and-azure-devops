@@ -99,6 +99,7 @@ stages:
       # Deploy Cluster to QA
       - deployment: DeployQAAKSCluster
         displayName: Deploy QA AKS Cluster
+        dependsOn: DeployDevAKSCluster
         # pool:
         #  name: $(AGENT_POOL_NAME)
         environment: $(QA_ENVIRONMENT)
