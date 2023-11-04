@@ -83,7 +83,7 @@ stages:
                     provider: 'azurerm'
                     command: 'plan'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
-                    commandOptions: '-var ssh_public_key=$(sshkeysecureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
+                    commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                     environmentServiceNameAzureRM: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
                 - task: TerraformTaskV4@4
                   displayName: Terraform Apply
