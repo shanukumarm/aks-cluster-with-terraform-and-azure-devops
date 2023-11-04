@@ -49,10 +49,12 @@ stages:
               command: 'validate'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
 
+  # Deploy cluster to Dev and QA environment
   - stage: DeployAKSCluster
     jobs:
-      - deployment: DeployAKSCluster
-        displayName: DeployAKSCluster
+      # Deploy cluster to dev
+      - deployment: DeployDevAKSCluster
+        displayName: Deploy Dev AKS Cluster
         # pool:
         #  name: $(AGENT_POOL_NAME)
         environment: $(DEV_ENVIRONMENT)
@@ -85,14 +87,6 @@ stages:
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                     environmentServiceNameAzureRM: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
-                # - task: TerraformTaskV4@4
-                #   displayName: Terraform Apply
-                #   inputs:
-                #     provider: 'azurerm'
-                #     command: 'apply'
-                #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
-                #     commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
-                #     environmentServiceNameAzureRM: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
                 - task: TerraformTaskV4@4
                   displayName: Terraform Apply
                   inputs:
@@ -100,4 +94,48 @@ stages:
                     command: 'apply'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
+                    environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
+      
+      # Deploy Cluster to QA
+      - deployment: DeployQAAKSCluster
+        displayName: Deploy QA AKS Cluster
+        # pool:
+        #  name: $(AGENT_POOL_NAME)
+        environment: $(QA_ENVIRONMENT)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadSecureFile@1
+                  displayName: Download SSH Key
+                  name: sshkey
+                  inputs:
+                    secureFile: 'aksprodsshkey.pub'
+                - task: TerraformTaskV4@4
+                  displayName: Terraform init
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'init'
+                    commandOptions: '-reconfigure'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
+                    backendServiceArm: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
+                    backendAzureRmResourceGroupName: 'terraform-storage-for-tfstate'
+                    backendAzureRmStorageAccountName: 'tfstateremotebackup'
+                    backendAzureRmContainerName: 'tfstatefiles'
+                    backendAzureRmKey: 'aks-azure-devops-$(QA_ENVIRONMENT).tfstate'
+                - task: TerraformTaskV4@4
+                  displayName: Terraform Plan
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'plan'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
+                    commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(QA_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(QA_ENVIRONMENT)-$(Build.BuildId).out'
+                    environmentServiceNameAzureRM: 'Free Trial(4d909174-d9a2-424b-adc9-f78c9dcefb96)'
+                - task: TerraformTaskV4@4
+                  displayName: Terraform Apply
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'apply'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
+                    commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(QA_ENVIRONMENT)-$(Build.BuildId).out'
                     environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
