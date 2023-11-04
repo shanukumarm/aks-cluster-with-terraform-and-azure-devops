@@ -95,10 +95,6 @@ stages:
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                     environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
-                - task: ManualIntervention@8
-                  inputs:
-                    onTimeout: 'resume'
-                  timeoutInMinutes: 5
                 - task: TerraformTaskV4@4
                   displayName: Terraform Destroy
                   inputs:
@@ -149,15 +145,5 @@ stages:
                     command: 'apply'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(QA_ENVIRONMENT)-$(Build.BuildId).out'
-                    environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
-                - task: ManualIntervention@8
-                  inputs:
-                    onTimeout: 'resume'
-                  timeoutInMinutes: 5
-                - task: TerraformTaskV4@4
-                  displayName: Terraform Destroy
-                  inputs:
-                    provider: 'azurerm'
-                    command: 'destroy'
                     environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
                 
