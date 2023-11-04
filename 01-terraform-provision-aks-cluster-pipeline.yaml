@@ -95,13 +95,13 @@ stages:
                     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
                     commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                     environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
-                - task: TerraformTaskV4@4
-                  displayName: Terraform Destroy
-                  inputs:
-                    provider: 'azurerm'
-                    command: 'destroy'
-                    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
-                    environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
+                # - task: TerraformTaskV4@4
+                #   displayName: Terraform Destroy
+                #   inputs:
+                #     provider: 'azurerm'
+                #     command: 'destroy'
+                #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-code'
+                #     environmentServiceNameAzureRM: 'terraform-aks-azurerm-svc-con'
       
       # Deploy Cluster to QA
       - deployment: DeployQAAKSCluster
